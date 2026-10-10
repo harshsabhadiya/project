@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Harsh & heli — Sample Wedding Invitation | ShubhWeds</title>
+  <meta name="author" content="ShubhWeds">
+  <meta name="description" content="A sample wedding invitation website by ShubhWeds — opening doors, an intro film, a scratch-to-reveal date, photo carousel and RSVP in action.">
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://shubhweds.in/demo/template-1/">
+  <meta name="theme-color" content="#f7f1e7">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shubhweds.in/demo/template-1/">
+  <meta property="og:site_name" content="ShubhWeds">
+  <meta property="og:locale" content="en_IN">
+  <meta property="og:title" content="harsh & heli — Sample Wedding Invitation | ShubhWeds">
+  <meta property="og:description" content="A sample wedding invitation website by ShubhWeds — opening doors, an intro film, a scratch-to-reveal date, photo carousel and RSVP in action.">
+  <meta property="og:image" content="https://media.shubhweds.in/images/og-preview.webp">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="https://shubhweds.in/favicon.ico" type="image/x-icon">
+
+  <!-- The door image is the whole first screen, so it is asked for ahead of
+       everything else. -->
+  <link rel="preload" as="image" href="https://media.shubhweds.in/images/invite-door.webp" fetchpriority="high">
+
+  <!-- Every video and the music track come from here. Opening the connection
+       now saves a DNS lookup and a TLS handshake later — a few hundred
+       milliseconds on a mobile connection, spent before they are needed. -->
+  <link rel="preconnect" href="https://media.shubhweds.in/" crossorigin>
+  <link rel="dns-prefetch" href="https://media.shubhweds.in/">
+
+  <link rel="stylesheet" href="https://shubhweds.in/demo/template-1/assets/fonts/fonts.css">
+  <link rel="stylesheet" href="https://shubhweds.in/demo/template-1/assets/css/style.css">
+
+  <script>
+    /\* Pin the page until the invitation is opened. The door and the film cover
+       the screen, but the invitation behind them is a full-length page and
+       would scroll under a swipe — leaving the guest holding an invitation
+       already halfway down when the film fades. assets/css/style.css has the
+       rules; assets/js/main.js lifts this the moment the invitation is theirs.
+
+       Set here rather than written into the <html> tag so that a guest whose
+       scripts never arrive is left with a page they can still scroll, and run
+       inline in <head> so no swipe lands before the seal does.
+
+       A reload is the same problem arriving by another road: the browser
+       restores the old scroll position behind the door, and lifting the seal
+       would reveal the middle of the invitation. Start every visit at the top.
+    \*/
+    document.documentElement.classList.add('is-sealed');
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  </script>
+  <style>
+
+/* Responsive CSS enhancements */
+:root{color-scheme:light;--sw-cream:#f7f1e7;--sw-rose:#b86f72;--sw-gold:#c8a66a;--sw-ink:#44352e}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--sw-cream)}
+body{margin:0;overflow-x:hidden;background:var(--sw-cream);color:var(--sw-ink);font-family:Georgia,"Times New Roman",serif}
+img,video,iframe,canvas,svg{max-width:100%}
+img{height:auto}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #b88b43;outline-offset:3px}
+[hidden]{display:none!important}
+.door{position:fixed;inset:0;z-index:1000;min-height:100svh;overflow:hidden;background:#38291f}
+.door__bg,.door__bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.door__scrim{position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(24,14,10,.48))}
+.door__cta{position:absolute;left:50%;bottom:10%;transform:translateX(-50%);width:min(88%,360px);text-align:center}
+.invite-btn,.directions,.rsvp__send{border:1px solid rgba(255,255,255,.6);border-radius:999px;padding:14px 25px;background:linear-gradient(135deg,#d9bc7e,#b58b4d);color:#fff;box-shadow:0 8px 25px #0002;letter-spacing:.05em}
+.invite-btn{display:inline-flex;align-items:center;gap:12px;font-size:1rem}
+.invite-btn__heart{width:18px;fill:currentColor}
+.intro{position:fixed;inset:0;z-index:1100;background:#160f0d}
+.intro video{width:100%;height:100%;object-fit:cover}
+.intro__loader{position:absolute;inset:auto 0 12%;text-align:center;color:#fff}
+.intro__spinner{width:36px;height:36px;margin:auto;border:3px solid #ffffff55;border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite}
+.intro__skip{position:absolute;right:20px;bottom:20px;border:1px solid #fff8;border-radius:30px;background:#241915b8;color:white;padding:10px 18px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.invite,.save-date,.memories,.functions,.venue,.rsvp{position:relative;isolation:isolate}
+.invite{min-height:100svh;display:grid;place-items:center;padding:80px 22px;background:radial-gradient(ellipse at 50% 40%,#fffdf8 0,#f6ecdf 62%,#ead9c7 100%);overflow:hidden}
+.invite__inner{position:relative;width:min(100%,900px);min-height:85svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:60px 20px;overflow:hidden}
+.invite__stack{position:relative;z-index:2;width:100%}
+.invite__glow{position:absolute;width:260px;height:260px;border-radius:50%;filter:blur(55px);opacity:.18;pointer-events:none}
+.invite__glow--gold{background:#d8b56e;top:12%;left:10%}.invite__glow--rose{background:#dba0a0;right:8%;bottom:10%}
+.eyebrow{text-transform:uppercase;letter-spacing:.22em;font-size:.75rem;color:#98744d}
+.eyebrow--wide{letter-spacing:.28em}
+.name{font-size:clamp(3.4rem,10vw,7rem);font-weight:400;line-height:1;margin:14px 0;color:#795447}
+.parents{font-size:.88rem;color:#87756a;margin:0 0 20px}
+.ampersand{font-size:3rem;color:#c49a5a;margin:6px}
+.divider{width:90px;height:1px;background:linear-gradient(90deg,transparent,#b58b4d,transparent);margin:25px auto}
+.knot{font-size:clamp(1rem,2.8vw,1.45rem);line-height:1.6}
+.knot span{display:block;color:#9d7046;margin-top:8px}
+.countdown{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:24px}
+.countdown>div,.countdown .countdown__item{min-width:65px;padding:12px 10px;border:1px solid #d7c3a2;border-radius:12px;background:#fff9f1}
+.invite__scroll{position:absolute;bottom:20px;left:0;right:0;text-align:center;font: .7rem Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#9b7a5a}
+.invite__scroll-arrow{display:block;font-size:1.2rem;animation:bob 1.5s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(5px)}}
+.invite__florals{position:absolute;inset:0;pointer-events:none;opacity:.18}
+.invite__floral{position:absolute;top:5%;height:90%;width:min(20%,180px)}
+.invite__floral img{height:100%;width:100%;object-fit:contain}
+.invite__floral--left{left:0}.invite__floral--right{right:0;transform:scaleX(-1)}
+.save-date{min-height:650px;display:grid;place-items:center;padding:80px 20px;text-align:center;overflow:hidden;background:#5b3b30;color:#fff}
+.save-date__bg,.venue__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.save-date__scrim,.venue__scrim{position:absolute;inset:0;background:linear-gradient(135deg,#21140d99,#291b14bb);z-index:-1}
+.save-date__inner{width:min(100%,650px)}
+.save-date__eyebrow{text-transform:uppercase;letter-spacing:.3em}
+.save-date__names{font-size:clamp(2.5rem,8vw,5rem);font-weight:400;margin:10px 0 35px}
+.scratch{position:relative;width:min(100%,360px);height:210px;margin:auto;border-radius:18px;overflow:hidden;background:#e7d0a0;color:#684a2d;box-shadow:0 15px 40px #0004}
+.scratch__prize{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.scratch__label{margin:0;text-transform:uppercase;letter-spacing:.15em;font-size:.75rem}
+.scratch__date{font-size:1.8rem;margin:12px 0 0}.scratch__year{margin:0;font-size:1.1rem}
+.scratch__foil{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+.scratch__hand{position:absolute;right:14px;bottom:10px;width:30px;color:#72552e;pointer-events:none}
+.save-date__hint{font-size:.85rem;letter-spacing:.1em}
+.memories,.functions,.rsvp{padding:85px 20px;background:#faf6ef}
+.section-head{text-align:center;max-width:760px;margin:0 auto 38px}
+.section-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:400;line-height:1.15;margin:10px 0;color:#765346}
+.memories__track{display:flex;align-items:center;gap:18px;overflow-x:auto;padding:20px max(20px,calc((100vw - 1100px)/2));scroll-snap-type:x mandatory;scrollbar-width:thin}
+.memories__item{flex:0 0 min(72vw,420px);scroll-snap-align:center;border-radius:16px;overflow:hidden;box-shadow:0 12px 35px #3e261b22;transition:transform .3s}
+.memories__item img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.memories__item:hover{transform:translateY(-5px)}
+.memories__hint,.functions__hint{text-align:center;color:#927b6d;font-size:.85rem}
+.functions{background:#f1e7d9}
+.functions__viewport{position:relative;max-width:1120px;margin:auto;overflow:hidden}
+.functions__track{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:10px 4px 22px;scrollbar-width:none}
+.functions__track::-webkit-scrollbar{display:none}
+.function{flex:0 0 min(78vw,300px);margin:0;scroll-snap-align:center;border-radius:16px;overflow:hidden;background:#fffaf4;box-shadow:0 12px 30px #432b1c18}
+.function__frame{position:relative;aspect-ratio:3/4;background:linear-gradient(145deg,#d4b48a,#77534a)}
+.function__frame video{width:100%;height:100%;object-fit:cover}
+.function__caption{padding:20px}
+.function__name{font-size:1.6rem;color:#8a5d49;margin:0 0 8px}
+.function__when,.function__note,.function__place{font: .88rem/1.5 Arial,sans-serif;color:#806f63;margin:5px 0}
+.functions__arrow{position:absolute;z-index:3;top:40%;border:0;width:42px;height:42px;border-radius:50%;background:#fff;color:#6f5142;box-shadow:0 3px 15px #0002}
+.functions__arrow--left{left:4px}.functions__arrow--right{right:4px}.functions__arrow svg{width:22px}
+.venue{min-height:650px;padding:80px 20px;display:grid;place-items:center;text-align:center;color:white;overflow:hidden}
+.venue__inner{width:min(100%,650px)}
+.venue__title{font-size:clamp(2rem,5vw,3.6rem);font-weight:400;line-height:1.2}
+.venue__map{height:280px;margin:28px 0;border:5px solid #fff8;border-radius:16px;overflow:hidden;box-shadow:0 12px 30px #0003}
+.venue__map iframe{width:100%;height:100%;border:0}
+.directions{background:#f7e5bf;color:#644a35;border:0}
+.rsvp{overflow:hidden;background:radial-gradient(ellipse at top,#fffaf3,#f2e5d8)}
+.rsvp__inner{position:relative;z-index:1;width:min(100%,720px);margin:auto;text-align:center}
+.rsvp__lede{color:#87766b;line-height:1.7}
+.rsvp__card{margin:35px auto 20px;max-width:560px;padding:28px;border:1px solid #e5d3bb;border-radius:20px;background:#fffaf4;box-shadow:0 16px 45px #4c302010}
+.rsvp__card-head{display:flex;align-items:center;justify-content:center;gap:12px;padding-bottom:20px;border-bottom:1px solid #eadcc9;color:#9a6c51}
+.rsvp__card-head svg{width:18px;fill:#bc8b76}
+.rsvp__fields{display:grid;gap:18px;text-align:left;padding-top:22px}
+.rsvp__field{display:grid;gap:8px;color:#765d4d;font-size:.9rem}
+.rsvp__field input,.rsvp__field textarea{width:100%;padding:13px 14px;border:1px solid #e0cdb9;border-radius:10px;background:#fff;color:#3d3029}
+.rsvp__field textarea{resize:vertical}
+.rsvp__choice{display:flex;gap:10px;flex-wrap:wrap}
+.rsvp__pick{padding:10px 14px;border:1px solid #d8c2a9;border-radius:30px;background:#fff;color:#7b5b48}
+.rsvp__pick[aria-pressed="true"]{background:#8b6650;color:#fff;border-color:#8b6650}
+.rsvp__send{width:100%;border:0}
+.rsvp__thanks{padding:25px 10px;line-height:1.6}
+.rsvp__thanks svg{width:30px;fill:#bd8c76}
+.rsvp__again{border:1px solid #c7a681;border-radius:30px;padding:10px 18px;background:transparent;color:#795743}
+.rsvp__note{font-size:.82rem;color:#8b7a6e;line-height:1.6}
+.rsvp__glow{position:absolute;width:280px;height:280px;border-radius:50%;filter:blur(60px);opacity:.22;pointer-events:none}
+.rsvp__glow--gold{background:#e0bf7c;top:0;left:-100px}.rsvp__glow--rose{background:#e6b1b1;right:-100px;bottom:0}
+.design-credit{text-align:center;padding:24px 15px;background:#e8d8c7;color:#806b5b;font-size:.85rem}
+.design-credit a{color:#80523d}
+.is-sealed{overflow:hidden}
+@media(min-width:900px){.invite{padding:70px}.invite__inner{min-height:90vh}.memories__item{flex-basis:360px}.function{flex-basis:270px}}
+@media(max-width:600px){.invite{padding:35px 10px}.invite__inner{padding:48px 12px;min-height:100svh}.invite__floral{width:15%;opacity:.65}.name{font-size:clamp(3rem,15vw,5rem)}.parents{font-size:.78rem}.save-date{min-height:570px;padding:55px 15px}.memories,.functions,.rsvp{padding:60px 14px}.venue{min-height:580px;padding:55px 15px}.venue__map{height:240px}.rsvp__card{padding:20px 16px}.functions__arrow{width:36px;height:36px}.function{flex-basis:82vw}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+  </style>
+</head>
+
+<body>
+
+<!-- ==========================================================================
+     1. Opening door — the first thing a guest sees. Tapping the button bursts
+        hearts, lifts the curtain and hands over to the intro video.
+     ========================================================================== -->
+<div class="door" id="door">
+  <div class="door__bg">
+    <img src="https://media.shubhweds.in/images/invite-door.webp" width="1023" height="1537"
+         fetchpriority="high" decoding="async"
+         alt="Decorated wedding entrance with flowers and lanterns">
+    <div class="door__scrim"></div>
+  </div>
+
+  <!-- Floating hearts, generated by js/effects.js -->
+  <div class="hearts hearts--fixed" data-hearts></div>
+
+  <div class="door__cta">
+    <button class="invite-btn" type="button" id="open-invite">
+      <span>You are invited</span>
+      <svg class="invite-btn__heart" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Bursting hearts are injected here on click -->
+  <div class="burst" id="burst" hidden></div>
+</div>
+
+<!-- ==========================================================================
+     2. Intro video — full-screen, muted, plays then fades into the invite.
+
+        The \`src\` is written here rather than attached by script on purpose.
+        The browser's preload scanner reads ahead of the parser and starts
+        this download while the stylesheet and the door image are still
+        arriving — seconds earlier than any script could ask for it, and those
+        are seconds the guest spends reading the door rather than waiting.
+
+        It is the only thing this page asks of the network up front. The music
+        track and the four function clips stay untouched until the invitation
+        is open, so the film has the connection to itself.
+     ========================================================================== -->
+<div class="intro" id="intro" hidden>
+  <video id="intro-video" src="https://media.shubhweds.in/videos/intro-video.mp4"
+         muted playsinline preload="auto"></video>
+
+  <script>
+    /\* Where the guest has asked their browser to spend less data, or is on a
+       2g connection, the film is not shown at all — so stop the download that
+       the preload scanner has just started, before it amounts to anything.
+
+       Deliberately self-contained and inline: it has to run the instant the
+       element above is parsed, which is well before assets/js/network.js has
+       been fetched. The same test lives there, in full, for everything else. \*/
+    (function () {
+      var c = navigator.connection || navigator.webkitConnection || {};
+      if (!c.saveData && c.effectiveType !== '2g' && c.effectiveType !== 'slow-2g') return;
+
+      var video = document.getElementById('intro-video');
+      video.removeAttribute('src');
+      video.load();
+    })();
+  </script>
+
+  <div class="intro__loader" id="intro-loader">
+    <div class="intro__spinner"><span></span></div>
+    <p class="intro__progress" id="intro-progress">Loading the film…</p>
+  </div>
+
+  <button class="intro__skip" id="intro-skip" type="button" hidden>Skip ›</button>
+</div>
+
+<!-- ==========================================================================
+     2a. Background music toggle — floating bottom-right for the whole visit.
+         assets/js/sections.js owns the actual <audio> and fades it in as soon
+         as the guest taps the opening button, alongside the intro video; this
+         button mirrors and controls its state from then on.
+     ========================================================================== -->
+<button class="music-toggle is-muted" id="music-toggle" type="button" aria-pressed="false" aria-label="Turn music on">
+  <span class="music-toggle__ring" aria-hidden="true"></span>
+  <span class="music-toggle__disc">
+    <svg class="music-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M9 18V5l12-2v13"/>
+      <circle cx="6" cy="18" r="3"/>
+      <circle cx="18" cy="16" r="3"/>
+    </svg>
+  </span>
+  <svg class="music-toggle__slash" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <line x1="3" y1="3" x2="21" y2="21"/>
+  </svg>
+</button>
+
+<!-- ==========================================================================
+     3. The invitation itself. Hidden until the video finishes.
+     ========================================================================== -->
+<main class="invite" id="invite">
+  <div class="hearts hearts--absolute" data-hearts></div>
+  <div class="invite__florals" aria-hidden="true">
+    <div class="invite__floral invite__floral--left">
+      <img data-src="https://media.shubhweds.in/images/invite-floral-vine.png" width="300" height="768"
+           decoding="async" alt="">
+    </div>
+    <div class="invite__floral invite__floral--right">
+      <img data-src="https://media.shubhweds.in/images/invite-floral-vine.png" width="300" height="768"
+           decoding="async" alt="">
+    </div>
+  </div>
+
+  <div class="invite__inner">
+    <div class="invite__glow invite__glow--gold"></div>
+    <div class="invite__glow invite__glow--rose"></div>
+
+    <div class="invite__stack">
+      <div class="reveal" style="animation-delay:.05s">
+        <p class="eyebrow">We are thrilled to announce that</p>
+      </div>
+
+      <div class="reveal" style="animation-delay:.12s">
+        <h1 class="name">Harsh</h1>
+        <p class="parents">(S/o Naranbhai & Nitaben chabhadiya)</p>
+      </div>
+
+      <div class="reveal" style="animation-delay:.2s">
+        <div class="ampersand">&</div>
+      </div>
+
+      <div class="reveal" style="animation-delay:.28s">
+        <h1 class="name">Heli</h1>
+        <p class="parents">(D/o Prakashbhai & Piyaben goyani)</p>
+      </div>
+
+      <div class="reveal" style="animation-delay:.36s">
+        <div class="divider"></div>
+      </div>
+
+      <div class="reveal" style="animation-delay:.44s">
+        <p class="knot">Are tying the knot on <span>25th November 2026</span></p>
+      </div>
+
+      <div class="reveal" style="animation-delay:.52s">
+        <!-- Cells are filled by js/countdown.js -->
+        <div class="countdown" id="countdown"></div>
+      </div>
+    </div>
+
+    <div class="invite__scroll" id="invite-scroll" aria-hidden="true">
+      <div class="invite__scroll-inner">
+        <span class="invite__scroll-text">Scroll Down</span>
+        <span class="invite__scroll-arrow">↓</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ==========================================================================
+     4. Save the date — scratch the golden card to reveal the wedding date.
+     ========================================================================== -->
+<section class="save-date">
+  <img class="save-date__bg" src="c:\Users\Admin\Downloads\p6.png"
+       width="1769" height="1187" loading="lazy" decoding="async"
+       alt="Harsh and heli dancing at their beachside wedding celebration">
+  <div class="save-date__scrim"></div>
+
+  <!-- Falling petals, generated by js/effects.js once scratching starts -->
+  <div class="petals" id="petals" hidden></div>
+
+  <div class="save-date__inner">
+    <div>
+      <p class="save-date__eyebrow">Save the date</p>
+      <h1 class="save-date__names">Harsh & Heli</h1>
+    </div>
+
+    <div class="scratch" id="scratch">
+      <div class="scratch__prize">
+        <p class="scratch__label">Tying the knot on</p>
+        <p class="scratch__date">25th November</p>
+        <p class="scratch__year">2026</p>
+      </div>
+      <canvas class="scratch__foil" id="scratch-foil"></canvas>
+
+      <!-- The gesture to make. The foil already says "Scratch here", but a
+           painted instruction is a thing to read; a hand sweeping across the
+           card is a thing to copy. assets/js/scratch-card.js decides when it
+           is on screen — it is never up while a finger is on the card. -->
+      <div class="scratch__hand" id="scratch-hand" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 14a8 8 0 0 1-8 8"/>
+          <path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/>
+          <path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1"/>
+          <path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10"/>
+          <path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
+        </svg>
+      </div>
+    </div>
+
+    <p class="save-date__hint" id="scratch-hint">Scratch the golden card</p>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     5. Memories — a coverflow carousel; the centred photo scales up.
+     ========================================================================== -->
+<section class="memories">
+  <div class="section-head">
+    <p class="eyebrow eyebrow--wide">A glimpse of us</p>
+    <h2 class="section-title">Our memories before we create more memories</h2>
+  </div>
+
+  <div class="memories__track" id="memories-track">
+    <div class="memories__item">
+      <img src="c:\Users\Admin\OneDrive\Desktop\wedding\p1.jpeg" alt="Harsh and Heli memory 1" width="1500" height="1000" loading="lazy" decoding="async" draggable="false">
+    </div>
+    <div class="memories__item">
+      <img src="c:\Users\Admin\OneDrive\Desktop\wedding\p2.png" alt="Harsh and Shreya memory 2" width="1500" height="1000" loading="lazy" decoding="async" draggable="false">
+    </div>
+    <div class="memories__item">
+      <img src="c:\Users\Admin\OneDrive\Desktop\wedding\p6.jpeg" alt="Harsh and Shreya memory 3" width="1500" height="1000" loading="lazy" decoding="async" draggable="false">
+    </div>
+    <div class="memories__item">
+      <img src="c:\Users\Admin\OneDrive\Desktop\wedding\p4.png" alt="Harsh and Shreya memory 4" width="1500" height="1000" loading="lazy" decoding="async" draggable="false">
+    </div>
+    <div class="memories__item">
+      <img src="c:\Users\Admin\OneDrive\Desktop\wedding\p5.jpeg" alt="Harsh and Shreya memory 5" width="781" height="999" loading="lazy" decoding="async" draggable="false">
+    </div>
+  </div>
+
+  <p class="memories__hint">Swipe to explore</p>
+</section>
+
+<!-- ==========================================================================
+     6. Wedding functions — drag or scroll the video cards sideways.
+     ========================================================================== -->
+<section class="functions">
+  <div class="section-head">
+    <p class="eyebrow eyebrow--wide">The celebrations</p>
+    <h2 class="section-title">Our wedding functions</h2>
+  </div>
+
+  <div class="functions__viewport">
+    <div class="functions__track" id="functions-track">
+      <figure class="function">
+        <div class="function__frame">
+          <video data-src="https://media.shubhweds.in/videos/mehendi.mp4" muted loop playsinline preload="none"></video>
+          <figcaption class="function__caption">
+            <p class="function__name">Mehendi</p>
+            <p class="function__when">22 November<br>11:00 AM onwards</p>
+            <p class="function__note">Henna, laughter & music</p>
+            <p class="function__place">Momai Nagar, surat</p>
+          </figcaption>
+        </div>
+      </figure>
+
+      <figure class="function">
+        <div class="function__frame">
+          <video data-src="https://media.shubhweds.in/videos/sangeet.mp4" muted loop playsinline preload="none"></video>
+          <figcaption class="function__caption">
+            <p class="function__name">Sangeet</p>
+            <p class="function__when">23 November<br>8:00 PM onwards</p>
+            <p class="function__note">A night of dance and celebration</p>
+            <p class="function__place"></p>
+          </figcaption>
+        </div>
+      </figure>
+
+      <figure class="function">
+        <div class="function__frame">
+          <video data-src="https://media.shubhweds.in/videos/haldi.mp4" muted loop playsinline preload="none"></video>
+          <figcaption class="function__caption">
+            <p class="function__name">Haldi</p>
+            <p class="function__when">24 November<br>10:00 AM onwards</p>
+            <p class="function__note">Turmeric & sunshine</p>
+            <p class="function__place">Momai Nagar, surat</p>
+          </figcaption>
+        </div>
+      </figure>
+
+      <figure class="function">
+        <div class="function__frame">
+          <video data-src="https://media.shubhweds.in/videos/wedding.mp4" muted loop playsinline preload="none"></video>
+          <figcaption class="function__caption">
+            <p class="function__name">Wedding</p>
+            <p class="function__when">25 November<br>7:00 PM onwards</p>
+            <p class="function__note">The forever vow</p>
+            <p class="function__place">Momai Nagar, surat</p>
+          </figcaption>
+        </div>
+      </figure>
+    </div>
+
+    <button class="functions__arrow functions__arrow--left" type="button"
+            id="functions-prev" aria-label="Scroll left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="functions__arrow functions__arrow--right" type="button"
+            id="functions-next" aria-label="Scroll right">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+  </div>
+
+  <p class="functions__hint">Drag or scroll sideways to see them all</p>
+</section>
+
+<!-- ==========================================================================
+     7. Venue — map plus a paper plane that flies off to Google Maps.
+     ========================================================================== -->
+<section class="venue">
+  <img class="venue__bg" src="https://media.shubhweds.in/images/taj-palace.webp"
+       width="426" height="240" loading="lazy" decoding="async"
+       alt="The Taj Mahal Palace hotel in Mumbai seen from the harbour">
+  <div class="venue__scrim"></div>
+
+  <div class="plane" id="plane" hidden>
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5L21 16Z"/>
+    </svg>
+  </div>
+
+  <div class="venue__inner">
+    <p class="eyebrow eyebrow--wide">The venue</p>
+    <h2 class="venue__title">We are waiting for you at<br>Momai Nagar, surat</h2>
+
+    <div class="venue__map">
+      <iframe title="Map showing The Taj Mahal Palace, Mumbai" loading="lazy"
+              src="https://maps.google.com/maps?q=18.921984,72.833044&t=&z=15&ie=UTF8&iwloc=&output=embed"></iframe>
+    </div>
+
+    <button class="directions" type="button" id="directions">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5L21 16Z"/>
+      </svg>
+      Get directions
+    </button>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     8. RSVP — a sample form, revealed on scroll. Replies are acknowledged but
+        not sent anywhere; assets/js/sections.js is where to wire up your own
+        endpoint.
+     ========================================================================== -->
+<section class="rsvp" id="rsvp">
+  <div class="rsvp__glow rsvp__glow--gold"></div>
+  <div class="rsvp__glow rsvp__glow--rose"></div>
+
+  <div class="rsvp__inner">
+    <div class="rsvp__intro" data-rsvp-reveal>
+      <p class="eyebrow eyebrow--wide">Be our guest</p>
+      <h2 class="section-title">Kindly respond</h2>
+      <p class="rsvp__lede">Let us know if you’ll be celebrating with us. We can’t wait to see you there.</p>
+    </div>
+
+    <div class="rsvp__card" data-rsvp-reveal style="transition-delay:150ms">
+      <div class="rsvp__card-head">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <span>Harsh & Shreya</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </div>
+      <div class="rsvp__form">
+        <!-- A sample form: nothing is sent anywhere. On a real invitation this
+             posts to the couple's own RSVP inbox — see assets/js/sections.js. -->
+        <form class="rsvp__fields" id="rsvp-form">
+          <label class="rsvp__field">
+            <span>Your name</span>
+            <input name="fullName" type="text" placeholder="Full name" required>
+          </label>
+
+          <label class="rsvp__field">
+            <span>Phone number</span>
+            <input name="phoneNumber" type="tel" placeholder="+91 ..." required>
+          </label>
+
+          <div class="rsvp__field">
+            <span>Will you attend?</span>
+            <div class="rsvp__choice" data-choice="attendingStatus">
+              <button class="rsvp__pick" type="button" aria-pressed="true">Joyfully yes</button>
+              <button class="rsvp__pick" type="button" aria-pressed="false">Regretfully no</button>
+            </div>
+          </div>
+
+          <!-- Hidden unless the guest is coming. -->
+          <label class="rsvp__field" id="rsvp-guests-field">
+            <span>Number of guests</span>
+            <input name="numberOfGuests" type="number" min="1" max="10" value="1">
+          </label>
+
+          <label class="rsvp__field">
+            <span>A message for the couple</span>
+            <textarea name="message" rows="2" placeholder="Your blessings & wishes..."></textarea>
+          </label>
+
+          <button class="rsvp__send" type="submit" id="rsvp-send">
+            <span id="rsvp-send-label">Send RSVP</span>
+          </button>
+        </form>
+
+        <!-- Shown when the answer is "Joyfully yes". -->
+        <div class="rsvp__thanks" id="rsvp-thanks" tabindex="-1" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <h3>Thank you!</h3>
+          <p>Your reply is safely with us. We cannot wait to see you there.</p>
+          <button class="rsvp__again" type="button" id="rsvp-again">Send another response</button>
+        </div>
+
+        <!-- And when it is "Regretfully no" — there is no seat to confirm, so
+             the card says something else instead. -->
+        <div class="rsvp__thanks rsvp__thanks--regrets" id="rsvp-regrets" tabindex="-1" hidden>
+          <svg class="rsvp__moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 14.6A8.6 8.6 0 0 1 9.4 3.6a8.6 8.6 0 1 0 11 11z"/></svg>
+          <h3>You will be missed, <span class="rsvp__guest" id="rsvp-regrets-name">friend</span></h3>
+          <p>If your plans ever change, your seat will always be here for you.💛</p>
+          <button class="rsvp__again" type="button" id="rsvp-regrets-again">Change my answer</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="rsvp__note" data-rsvp-reveal style="transition-delay:300ms">
+      This is a sample invitation, so replies are not collected. On your own
+      invitation every RSVP arrives straight in your inbox.
+    </p>
+  </div>
+</section>
+
+<footer class="design-credit" aria-label="Design credit">
+  <p>A little piece of forever, crafted by <a href="https://shubhweds.in/">ShubhWeds</a>.</p>
+</footer>
+
+<script src="https://shubhweds.in/demo/template-1/assets/js/config.js"></script>
+<script src="https://shubhweds.in/demo/template-1/assets/js/network.js"></script>
+<script src="https://shubhweds.in/demo/template-1/assets/js/effects.js"></script>
+<script src="https://shubhweds.in/demo/template-1/assets/js/opening.js"></script>
+<script src="https://shubhweds.in/demo/template-1/assets/js/countdown.js"></script>
+<script src="https://shubhweds.in/demo/template-1/assets/js/scratch-card.js"></script>
+<script src="https://shubhweds.in/demo/template-1/assets/js/carousels.js"></script>
+<script src="https://shubhweds.in/demo/template-1/assets/js/sections.js"></script>
+<script src="https://shubhweds.in/demo/template-1/assets/js/main.js"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920" integrity="sha512-L0ha0OXavK/8okipN9F8BtP84dg9DUhPERbBXzwI6dgTA55d2+yweo3pn5CSFYs45/r8md2+xvUPtTdvTNRfjA==" data-cf-beacon='{"version":"2024.11.0","token":"e306d405b2cb4480a8f231b05c3d99fc","r":1,"spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>
